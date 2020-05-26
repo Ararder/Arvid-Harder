@@ -1,8 +1,7 @@
 ---
 authors:
 - admin
-bio: My research interests include distributed robotics, mobile computing and programmable
-  matter.
+bio: 
 education:
   courses:
   - course: MA in Psychology
@@ -24,18 +23,12 @@ organizations:
   url: ""
 role: Master student in Psychology
 social:
-- icon: envelope
-  icon_pack: fas
-  link: '#contact'
 - icon: twitter
   icon_pack: fab
-  link: https://twitter.com/GeorgeCushen
-- icon: google-scholar
-  icon_pack: ai
-  link: https://scholar.google.co.uk/citations?user=sIwtMXoAAAAJ
+  link: https://twitter.com/ararder
 - icon: github
   icon_pack: fab
-  link: https://github.com/gcushen
+  link: https://github.com/ararder
 superuser: true
 title: Arvid Harder
 user_groups:
@@ -43,4 +36,4 @@ user_groups:
 - Visitors
 ---
 
-Hi! I am a Psychology student at Karolinska Institutet. Im interested in datascience, molecular psychiatry, personality and weightlifting/running.
+I am a psychology student at Karolinska Institute. Interests range from molecular psychiatry to running and weightlifting.

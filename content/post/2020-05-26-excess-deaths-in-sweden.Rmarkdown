@@ -1,0 +1,287 @@
+---
+title: Excess deaths in Sweden
+author: ''
+date: '2020-05-26'
+slug: excess-deaths-in-sweden
+categories: []
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-05-26T22:07:37+02:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+Recently SCB, the Swedish bureau of statistics releasaed all-cause mortality for March and most of April. It's hard to estimate just how deadly COVID-19 is, to ascertain what epidemiologists call Infection-fatality Rate, one needs the true number of deaths, and the true number of cases. This is hard. Another way is to to look at Mortality rate, and compare it to previous years. This has several strengths. First of all, it will capture second-order effects. As hospitals are increasingly strained by the large number of cases, other medical procedures will be delayed. People might be afraid to go to the hospital the check out that chest pain. By looking at daily deaths, these effects will be reflected in the data.
+
+```{r, echo=FALSE, error=FALSE, warning=FALSE,message=FALSE, comment = FALSE}
+library(tidyverse)
+library(readxl)
+library(lubridate)
+library(forecast)
+#defining a theme for graphing.
+my_theme <- theme(panel.grid = element_blank(), axis.line = element_line(color = "black"),
+                  panel.background = element_blank(), axis.text.x = element_text(color = "black"), 
+                  axis.text.y = element_text(color = "black"),
+                  legend.key = element_blank(), legend.title = element_blank())
+filepath2 <- "~/Downloads/2020-05-08---preliminar-statistik-over-doda-inkl-eng.xlsx"
+
+#using import vieweing pane.
+X2020_04_24_preliminar_statistik_over_doda_inkl_eng <- read_excel(filepath2, sheet = "Tabell 1", skip = 6)
+# renmaing file
+daily_deaths_sweden<- X2020_04_24_preliminar_statistik_over_doda_inkl_eng
+#cleaning dataset
+daily_deaths_sweden <- daily_deaths_sweden %>% 
+  select(DagMånad, "2015", "2016", "2017", "2018", "2019","2020")
+#separate the month and day column, rename months from swedish to english, so lubridate can transform.
+daily_deaths_sweden <- separate(daily_deaths_sweden, DagMånad, c("Day", "Month"), sep = " ") %>% 
+  mutate(Month = case_when(Month == "januari" ~ 1,
+                           Month == "februari" ~2,
+                           Month == "mars" ~ 3,
+                           Month == "april" ~ 4,
+                           Month == "maj" ~ 5,
+                           Month == "juni" ~ 6,
+                           Month == "juli" ~ 7,
+                           Month == "augusti" ~ 8,
+                           Month == "september" ~ 9,
+                           Month == "oktober" ~ 10,
+                           Month == "november" ~ 11,
+                           Month == "december" ~ 12))
+
+daily_deaths_sweden <- daily_deaths_sweden %>% 
+  mutate(deaths_2015 = `2015`, deaths_2016 = `2016`, 
+         deaths_2017 = `2017`, deaths_2018 = `2018`, 
+         deaths_2019 = `2019`,
+         deaths_2020 = `2020`) %>% 
+  select(deaths_2015, deaths_2016, deaths_2017, 
+         deaths_2018, deaths_2019, deaths_2020, Month, Day)
+
+#unknown death date
+unknown_date <- daily_deaths_sweden[367,]
+#removing unknown deaths for now
+daily_deaths_sweden <- daily_deaths_sweden[-367,]
+
+
+
+#Make dataset long.
+long_data <- daily_deaths_sweden %>% 
+  pivot_longer(cols = c(deaths_2015, deaths_2016, 
+                        deaths_2017, deaths_2018, 
+                        deaths_2019, deaths_2020), 
+                        names_to = "Year",
+                        values_to = "Deaths",
+                        names_prefix = "deaths_")
+
+#Date data into one column
+long_data <- long_data %>% 
+  unite("date", c(Year, Month, Day), sep = " ") %>% 
+  mutate(date = ymd(date))
+#moving average
+long_data <- long_data %>% 
+  arrange(date) %>% 
+  mutate(avg_death = ma(Deaths, 3))
+#year day variable, for plotting.
+long_data <- long_data %>% 
+  mutate(year = year(date), year_day = yday(date)) 
+```
+
+We start by by taking a look on number of daily deaths for the years 2015-2020.
+For 2020, the data for all of april has not been released yet. Furthermore, it takes a couple of weeks for the numbers to be correct for any particular date. This can be seen in the graph as the line trending downwards and the end of April. SCB released the latest daily death statistics the 27th of April, but in the following graphs the data will only be visualized up until the 15th of April.
+
+
+
+
+```{r, echo = FALSE, warning=FALSE}
+long_data %>% 
+  filter(date < "2020-04-15") %>% 
+  ggplot(aes(x = date, y = avg_death)) +
+  geom_line(color = "Steelblue") +
+  my_theme +
+  labs(title = "Daily Deaths in Sweden, 2015-2020",
+       subtitle = "3-day moving average",
+       caption = "Data from SCB.se",
+       y = "Daily Deaths",
+       x = " ")
+```
+
+We can see a sharp uptick in April of 2020. Lets compare just this period to 2018 and 2019. The graphs show data until the 16th of April, where the number of deaths per day is growing much smaller due to the lag effect.
+
+```{r, echo=FALSE}
+long_data %>% 
+  filter(year == 2018 | year == 2019 | year == 2020) %>% 
+  filter(year_day < 110) %>% 
+  ggplot(aes(x = year_day, y = avg_death, color = factor(year))) +
+  geom_line() +
+  my_theme +
+  scale_x_continuous(breaks = c(0,30,60,90,120),
+                     labels = paste0(c("Jan","Feb", "March","April","May")))  +
+  scale_y_continuous(limits = c(100, 400)) +
+  labs( title = "Excess Mortality in Sweden",
+        subtitle = "January to April",
+        caption = "Data from SCB.se",
+        y = "Daily Deaths",
+        x = " ")
+
+```
+
+
+
+The data shows that all-cause mortality for all of Sweden starts to rise in the end of March. But how many more people have actually died? Below is the number of deaths between the 1th of January and April 20th.
+
+```{r, echo=FALSE, tidy = TRUE}
+
+long_data %>% 
+  filter(year_day < 110) %>% 
+  group_by(year) %>% 
+  summarise(sum(Deaths))
+```
+
+Up until the 20th of April, more people actually had died in 2018 or 2015 than in 2020.
+March the 11th was date of the first person to die of COVID-19. Lets restrict the range to start at that period.
+
+
+```{r, echo=FALSE, tidy = TRUE}
+long_data %>% 
+  filter(year_day < 110, year_day > 71) %>% 
+  group_by(year) %>% 
+  summarise(sum(Deaths))
+```
+
+In this timeperiod, the total number of deaths is higher for 2020. Compared to 2015 and 2018, who likely had more severe flu epidemics, 2020 has ~1300 more deaths than 2018, and ~1600 more deaths than 2015.
+
+
+However, viruses like COVID - 19 grow in clusters, and some areas will be much farther along in the epidemic than others.
+
+Let's break down the analysis by County. First, let us take a look at Stockholm, the worst hit county in Sweden.
+```{r, echo=FALSE, error=FALSE, warning=FALSE,message=FALSE}
+#loading 
+library(tidyverse)
+library(readxl)
+library(lubridate)
+library(forecast)
+#theme for graphs
+my_theme <- theme(panel.grid = element_blank(), axis.line = element_line(color = "black"),
+                  panel.background = element_blank(), axis.text.x = element_text(color = "black"), 
+                  axis.text.y = element_text(color = "black"),
+                  legend.key = element_blank(), legend.title = element_blank())
+#read in data for all counties
+deaths_by_community <- read_excel(filepath2, 
+                                                                  sheet = "Tabell 3", skip = 5)
+
+#change column names
+deaths_by_community <- deaths_by_community[-2,] %>% 
+  rename(date = `Datum/Date`, Year = År, Stockholm = `Län / County`, 
+         Uppsala = ...4, Södermanland = ...5, Östergötland = ...6,
+         Jönköping = ...7, Kronoberg = ...8, Kalmar = ...9, Gotland = ...10,
+         Blekinge = ...11, Skåne = ...12, Halland = ...13, VästraGötaland = ...14,
+         Värmland = ...15, Örebro = ...16, Västmanland = ...17, Dalarna = ...18, Gävleborg = ...19, 
+         VästerNorrland = ...20, Jämtland = ...21, Västerbotten = ...22, Norrbotten = ...23) %>% 
+  select(-...24, -...25 , -...26, -...27)
+
+#removing 2 extraneous rows
+deaths_by_community <- deaths_by_community[-1,]
+deaths_by_community <- deaths_by_community[-1,]
+#aggregated info, removing it from clean dataset. saving it as misc
+misc <- deaths_by_community[(846:851),]
+deaths_by_community <- deaths_by_community[-(846:851),]
+
+
+
+#separate the month and day column
+deaths_by_community <-  deaths_by_community %>% 
+  separate(date, into = c("Day", "Month"), sep = " ")
+
+##renaming months from swedish to enligsh
+deaths_by_community <- deaths_by_community %>% 
+  mutate(Month = case_when(Month == "januari" ~ 1,
+                         Month == "februari" ~2,
+                         Month == "mars" ~ 3,
+                         Month == "april" ~ 4,
+                         Month == "maj" ~ 5,
+                         Month == "juni" ~ 6,
+                         Month == "juli" ~ 7,
+                         Month == "augusti" ~ 8,
+                         Month == "september" ~ 9,
+                         Month == "oktober" ~ 10,
+                         Month == "november" ~ 11,
+                         Month == "december" ~ 12))
+
+#SCB codes zero deaths as ".." changing this to zero
+deaths_by_community <- deaths_by_community %>% 
+  mutate_all(~ replace(., . == "..", values = 0))
+
+#gathering into 1 date column
+deaths_by_community <- deaths_by_community %>% 
+  unite(., col = "Date", Day, Month, Year,sep = "-",) %>%
+  mutate(Date = dmy(Date))
+
+
+#converting deaths to numeric
+community_long <- deaths_by_community %>% 
+  pivot_longer(cols = -1,
+               names_to = "County",
+               values_to = "Deaths") %>% 
+  mutate(Deaths = as.numeric(Deaths))
+
+
+#final result; Long dataset
+#Lets try ot make a a long dataset, but with a moving average instead daily deays
+progress <- deaths_by_community %>% 
+  arrange(Date) %>% 
+  mutate_at(c(2:22), .funs = as.numeric) %>% 
+  mutate_at(c(2:22), ma, order = 3) %>% 
+  mutate_at(c(2:22), round)
+
+#converting columns to numeric
+progress <- progress %>% 
+  mutate_at(c(2:22), as.numeric)
+
+#make the dataset long with moving average computed.
+thin <- progress %>% 
+  pivot_longer(cols = -1,
+               names_to = "County",
+               values_to = "Deaths")
+thin <- thin %>% 
+  mutate(year = year(Date), year_day = yday(Date))
+
+```
+
+```{r, echo=FALSE}
+thin %>%
+  filter(year_day < 115, County == "Stockholm") %>% 
+  ggplot(aes(x = year_day, y = Deaths, color = factor(year))) +
+  geom_line(lwd = 1.05) +
+  theme(legend.key = element_blank(), legend.title = element_blank()) +
+  labs( title = "Excess Mortality in Stockholm",
+        subtitle = "3-day moving average",
+        x = "",
+        y = "Daily Deaths",
+        caption = "Data from SCB.se") + 
+  my_theme + #custome theme
+  scale_x_continuous(breaks = c(0,30,60,90,120),  #adding month names as axis ticks
+                     labels = paste0(c("Jan","Feb", "Mars","April","May")))
+```
+
+The impact on excess deaths are pretty obvious in  s Stockholm. How about the other countys?
+```{r, echo = FALSE, warning = FALSE}
+thin %>% 
+  filter(year_day < 110) %>% 
+  ggplot(aes(x = year_day, y = Deaths, color = factor(year))) +
+  geom_line() + 
+  facet_wrap(~County) +
+  my_theme +
+  scale_x_continuous(breaks = c(0,30,60,90,120), 
+                     labels = paste0(c("Jan","Feb", "Mars","April","May"))) +
+  labs(title = "Mortality rates in Swedish Counties",
+      subtitle = "3-day moving average",
+       x = " ",
+       y = "Daily Deaths")
+```
+
+This is interesting! The only county with a clear elevated daily death statistic is Stockholm.
+The pandemic doesnt seem to have a very large impact on number of deaths outside of Stockholm.
+
