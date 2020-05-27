@@ -16,74 +16,134 @@ image:
   preview_only: no
 projects: []
 ---
-Recently SCB, the Swedish bureau of statistics releasaed all-cause mortality for March and most of April. It's hard to estimate just how deadly COVID-19 is, to ascertain what epidemiologists call Infection-fatality Rate, one needs the true number of deaths, and the true number of cases. This is hard. Another way is to to look at Mortality rate, and compare it to previous years. This has several strengths. First of all, it will capture second-order effects. As hospitals are increasingly strained by the large number of cases, other medical procedures will be delayed. People might be afraid to go to the hospital the check out that chest pain. By looking at daily deaths, these effects will be reflected in the data.
 
 
 
-We start by by taking a look on number of daily deaths for the years 2015-2020.
-For 2020, the data for all of april has not been released yet. Furthermore, it takes a couple of weeks for the numbers to be correct for any particular date. This can be seen in the graph as the line trending downwards and the end of April. SCB released the latest daily death statistics the 27th of April, but in the following graphs the data will only be visualized up until the 15th of April.
+# Excess Mortality
+
+As of writing this, [Folkhälsomyndigheten](https://experience.arcgis.com/experience/09f821667ce64bf7be6f9f87457ed9aa) (FHM), the swedish institution for public health has reported 4125 deaths due to COVID-19. However, we know that the number of deaths due to COVID-19 is higher. Some people are bound to die before getting tested, and will not be counted in official statistics. And there is bound to be second-order effects. If you are 55 and feel a sharp pain in the left side of your chest, maybe you think twice about going to the hopsital. 
 
 
+To get around this, another way of measuring death statistics is by looking at excess mortality. This compares the number of deaths this year, compared to other years. If we assume that the main difference between 2020 and other years is the COVID-19 pandemic, we can attribute the difference to corona! It is of course not possible to say that 2019 and 2020 is perfectly alike except in the case of a global pandemic. But estimating deaths this way is a better estimate than using official statistics. To get a feeling for how the mortality rate differs by year, let's start by looking at the number of daily deaths in Sweden, for the period 2015 - 2020. The data used in this analysis is provided by SCB. Since the start of the pandemic, it's been clear that these deaths sometimes take a while to be reported. Therefore, i show data up until May 8th, using the data published by SCB on May 22th. The two week delay should make the numbers shown robust to large reporting lags.
+<p>&nbsp;</p>  
 
 
 <img src="/post/2020-05-26-excess-deaths-in-sweden_files/figure-html/unnamed-chunk-2-1.png" width="672" />
 
-We can see a sharp uptick in April of 2020. Lets compare just this period to 2018 and 2019. The graphs show data until the 16th of April, where the number of deaths per day is growing much smaller due to the lag effect.
+The impact of COVID-19 is clear. Before March, 2020 is on track to have the lowest level of daily deaths in the period 2015-2020. The year that most closely follows the trajectory of 2020 is 2019. Somewhere around the 10th of March, the number of daily deaths sharply increases and peaks at April 15th with 397 deaths (Note that the graph shows a rolling 7-day average). The number of daily deaths then goes down following the peak, and seems to be on a steady decrease.
+
+
+How the pandemic spreads differ a lot by city and country.
+For example, New York has 29451 deaths according to [worldometer](https://www.worldometers.info/coronavirus/country/us/), which is a third of the entire US deathtoll. Regional mortality data is only publicaly available for 2018, 2019 and 2020. Therefore, let's take look at how these three years compare to each other in daily mortality.
+<p>&nbsp;</p>  
+
 
 <img src="/post/2020-05-26-excess-deaths-in-sweden_files/figure-html/unnamed-chunk-3-1.png" width="672" />
 
-
-
-The data shows that all-cause mortality for all of Sweden starts to rise in the end of March. But how many more people have actually died? Below is the number of deaths between the 1th of January and April 20th.
-
-
-```
-## # A tibble: 6 x 2
-##    year `sum(Deaths)`
-##   <dbl>         <dbl>
-## 1  2015         30282
-## 2  2016         28747
-## 3  2017         29771
-## 4  2018         30967
-## 5  2019         27592
-## 6  2020         30261
-```
-
-Up until the 20th of April, more people actually had died in 2018 or 2015 than in 2020.
-March the 11th was date of the first person to die of COVID-19. Lets restrict the range to start at that period.
+The main take-away from this graph is that 2018 is a relative outlier compared to 2020 and 2019. Up until middle of March, 2020 closely tracks the trajectory of 2019. When estimating excess deaths, i will give numbers with both 2018 and 2019 as comparisons, but i consider 2019 a better comparison to 2020 than 2018. While graphs are good to understand the trend, what does the numbers say?
 
 
 
-```
-## # A tibble: 6 x 2
-##    year `sum(Deaths)`
-##   <dbl>         <dbl>
-## 1  2015         10125
-## 2  2016          9586
-## 3  2017          9529
-## 4  2018         10469
-## 5  2019          9163
-## 6  2020         11970
-```
+| Year| Deaths|
+|----:|------:|
+| 2018|  35656|
+| 2019|  32344|
+| 2020|  36644|
 
-In this timeperiod, the total number of deaths is higher for 2020. Compared to 2015 and 2018, who likely had more severe flu epidemics, 2020 has ~1300 more deaths than 2018, and ~1600 more deaths than 2015.
+2020 has about a thousand more deaths compared to 2018, and about 4000 thousand more deaths than 2019. However, the first reported death due to COVID-19 was on March 11th. Since we are interested in estimating excess deaths due to the pandemic, we can restrict the range where we count daily deaths. For this table, the range is between March 11th and May 8th. 
 
 
-However, viruses like COVID - 19 grow in clusters, and some areas will be much farther along in the epidemic than others.
+| Year| Deaths|
+|----:|------:|
+| 2018|  15476|
+| 2019|  14181|
+| 2020|  18580|
 
-Let's break down the analysis by County. First, let us take a look at Stockholm, the worst hit county in Sweden.
+By restricting the range, the difference between 2018 and 2019 is no longer as large. The difference in deaths between 2019 and 2020 is also largely the same, indicating that most of the difference is from differences in mortality after March 11th. For 2018, the difference compared to 2020 is now much larger. This makes sense, as the impact of the flu epidemic of 2018 started fall of beginning in mid March if one looks at the previous graph.
+
+
+Compared to confirmed deaths, the number of excess deaths are larger. According to Folkhälsomyndigheten, the number of confirmed deaths by May 8th was 3462. Using 2019 as a control group, the number of excess deaths are 4399, and if we use 2018 as comparison, the number of excess deaths are 3104. This is another point in favour of not using 2018 as a comparison. The number of excess deaths are lower than confirmed cases! This is not what we would expect given that 2018 and 2020 mainly differ in that 2020 has a global pandemic. 
+
+
+Using the 2019 as comparison, Sweden had 4399 excess deaths. That's actually not to bad, compared to the numbers coming of out some other [countries](https://www.ft.com/content/4a91a414-4937-4c54-aa78-6d231f4a4e43). This would indicate that Sweden is pretty good at correctly labeling COVID-19 deaths.
 
 
 
-```
-## Warning: Removed 1 row(s) containing missing values (geom_path).
-```
 
-<img src="/post/2020-05-26-excess-deaths-in-sweden_files/figure-html/unnamed-chunk-7-1.png" width="672" />
 
-The impact on excess deaths are pretty obvious in  s Stockholm. How about the other countys?
-<img src="/post/2020-05-26-excess-deaths-in-sweden_files/figure-html/unnamed-chunk-8-1.png" width="672" />
 
-This is interesting! The only county with a clear elevated daily death statistic is Stockholm.
-The pandemic doesnt seem to have a very large impact on number of deaths outside of Stockholm.
 
+
+
+
+
+
+
+
+Lets switch gears and look at these number, but on the level of the 21 Swedish counties. As we saw earlier, there is a huge variation between cities in the same country.
+
+
+<img src="/post/2020-05-26-excess-deaths-in-sweden_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+
+ Only Stockholm has an obvious increase in mortality!
+
+<img src="/post/2020-05-26-excess-deaths-in-sweden_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+
+| Year| Deaths|
+|----:|------:|
+| 2018|   2653|
+| 2019|   2427|
+| 2020|   4507|
+
+
+The difference in total deaths for the time period March 11th - May 8th, is about 2000, for both 2018 and 2019 as comparisons! The flu pandemic of 2018 seems to have had less an impact in Stockholm. For this timeperiod the total number of deaths increased by 86% compared to 2019, and Stockholm stood for about half the excess mortality in Sweden, with only 1/5 the population!
+
+We can calculate the same percetange for all the other counties. How much is the total number of deaths elevated in this time period?
+
+
+
+|County         | % increase in deaths|
+|:--------------|--------------------:|
+|Stockholm      |                   86|
+|Gotland        |                   61|
+|Södermanland   |                   53|
+|Dalarna        |                   46|
+|Västmanland    |                   38|
+|Östergötland   |                   37|
+|Uppsala        |                   35|
+|Jönköping      |                   28|
+|VästraGötaland |                   26|
+|Norrbotten     |                   22|
+|Örebro         |                   19|
+|Kalmar         |                   18|
+|Halland        |                   15|
+|VästerNorrland |                   14|
+|Gävleborg      |                   13|
+|Jämtland       |                   12|
+|Kronoberg      |                   12|
+|Skåne          |                    9|
+|Blekinge       |                    7|
+|Värmland       |                    1|
+|Västerbotten   |                   -3|
+
+We can take a closer look on the four counties with the highest percentage of increased number of deaths.
+
+<img src="/post/2020-05-26-excess-deaths-in-sweden_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+
+Zooming, we can see that excess mortality starts to rise in the end of March. The numbers for Gotland is hard to visualize, as the county is so small that on most days nobody has died.
+
+However, the population is Sweden is concetrated in its five largest counties, with the five largest counties accounting for 60% of the population. Zooming in, we could see that excess mortality is definitely up for several counties. How about the largest ones?
+
+ 
+<img src="/post/2020-05-26-excess-deaths-in-sweden_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+
+
+
+
+
+# Conclusions
+
+The excess mortality for Stockholm is quite large. Between the time period March 11th to May 8th, approximately 2100 more people died compared to the same time period in 2019. This corresponds to an increase 86%. However - there is good news, with a peak halfway though April, and a steady decrease of excess deaths since then.
+
+Other counties also show evidence of excess mortality, with Sörmland at an increase of 51% percent, and Dalarna at 46%. This highlights how affected Stockholm has been compared to other counties. For the four largest counties outside of Stockholm, the excess mortality is not at all as large as the other counties discussed. This is both good and bad news, depending on what strategy Sweden takes going forward. These results would indicate that some regions have not been hit hard at all, opening up the possibility of completely suppresing COVID-19. However, if Sweden decides to pursue a herd-immunity strategy for the whole country, some counties have the brunt of the epidemic in front of them.
+ 
