@@ -36,4 +36,4 @@ user_groups:
 - Visitors
 ---
 
-I am a psychology student at Karolinska Institute. Interests range from molecular psychiatry to running and weightlifting.
+I studied economics for three years, but did not found it compelling. So i switched to psychology. My favourite book of 2019 was [The beginning of Infinity](https://www.amazon.com/The-Beginning-of-Infinity-audiobook/dp/B005HTYBCM/ref=sr_1_1?crid=23I7LBV2FREHH&dchild=1&keywords=david+deutsch&qid=1590613430&sprefix=david+deu%2Caps%2C238&sr=8-1) by David Deutsch. 
