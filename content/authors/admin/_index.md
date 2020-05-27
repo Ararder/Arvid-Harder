@@ -4,7 +4,7 @@ authors:
 bio: 
 education:
   courses:
-  - course: MA in Psychology
+  - course: MSc in Psychology
     institution: Karolinska Institute
     year: 2022
   - course: BSc in Psychology

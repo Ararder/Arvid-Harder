@@ -19,7 +19,7 @@ projects: []
 
 
 
-# Excess Mortality
+
 
 As of writing this, [Folkhälsomyndigheten](https://experience.arcgis.com/experience/09f821667ce64bf7be6f9f87457ed9aa) (FHM), the swedish institution for public health has reported 4125 deaths due to COVID-19. However, we know that the number of deaths due to COVID-19 is higher. Some people are bound to die before getting tested, and will not be counted in official statistics. And there is bound to be second-order effects. If you are 55 and feel a sharp pain in the left side of your chest, maybe you think twice about going to the hopsital. 
 
@@ -143,7 +143,7 @@ However, the population is Sweden is concetrated in its five largest counties, w
 
 # Conclusions
 
-The excess mortality for Stockholm is quite large. Between the time period March 11th to May 8th, approximately 2100 more people died compared to the same time period in 2019. This corresponds to an increase 86%. However - there is good news, with a peak halfway though April, and a steady decrease of excess deaths since then.
+The excess mortality for Stockholm is quite large. Between the time period March 11th to May 8th, approximately 2100 more people died compared to the same time period in 2019. This corresponds to an increase of 86%. However, there is good news as the excess mortality seems to have peaked in the middle of April and has been on a steady trajectory downwards since then.
 
 Other counties also show evidence of excess mortality, with Sörmland at an increase of 51% percent, and Dalarna at 46%. This highlights how affected Stockholm has been compared to other counties. For the four largest counties outside of Stockholm, the excess mortality is not at all as large as the other counties discussed. This is both good and bad news, depending on what strategy Sweden takes going forward. These results would indicate that some regions have not been hit hard at all, opening up the possibility of completely suppresing COVID-19. However, if Sweden decides to pursue a herd-immunity strategy for the whole country, some counties have the brunt of the epidemic in front of them.
  
