@@ -4,20 +4,25 @@ Personal Blog of Arvid Harder
 
 
 # Research plan for the Summer.
-Lu Yi proposed three projects to work on, and i like the framing of that. I have based the structure of this plan from the notes
+Lu Yi proposed three projects to work on, and i like the framing of that. I have based the structure of this plan from the [notes](https://www.evernote.com/shard/s219/client/snv?noteGuid=2f09e186-bcbe-42c9-a88f-23584ebfd119&noteKey=fdb8f26e89495bee&sn=https%3A%2F%2Fwww.evernote.com%2Fshard%2Fs219%2Fsh%2F2f09e186-bcbe-42c9-a88f-23584ebfd119%2Ffdb8f26e89495bee&title=Meet%2Bw%2BArvid%2Babout%2Bsummer%2Bprojects) 
 on our meeting you sent me.
+
 Some general ideas from Arvid:
 I would like to apply a "multiverse" approach as discussed in [this article](http://www.stat.columbia.edu/~gelman/research/published/multiverse_published.pdf).
-This approach has been used in other contemporary genetic research, such as in [Border et al](https://ajp.psychiatryonline.org/doi/full/10.1176/appi.ajp.2018.18070881). This is not very different from sensitivity analyses. This is how i summarized it to myself:
+This approach has been used in other contemporary genetic research, such as in [Border et al](https://ajp.psychiatryonline.org/doi/full/10.1176/appi.ajp.2018.18070881). 
+
+This is not very different from sensitivity analyses. This is how i summarized it to myself:
 
 "At several stages in data-anaylsis in a paper there are often several arbitrary choices to make about data-processing and choices for statistical analysis. For each paper, therefore, a host of possible datasets exists, a multiverse of datasets, and a multiverse of ways of analyzing the datasets. The solution to this is to leverage the scalability of modern programming tools, and to do ALL THE ANALYSIS, on ALL OF THE DATASETS."
 
-What would this entail for this project?
+## What would this entail for this project?
 
-1) There are multiple ways of computing the PRS. In the KI summer school, we computed several PRS by different p-val thresholds. I suggest we do the same thing again, but also use methods such as LASSO shrinkage. I'm using [this](https://www.biorxiv.org/content/10.1101/416545v1) paper as a guideline for the differnent methods of computing PRS, and we can compare which PRS has the best results.
+1) There are multiple ways of computing the PRS. In the KI summer school, we computed several PRS by different p-val thresholds. I suggest we do the same thing again, but also use methods such as LASSO shrinkage. I'm using [this](https://www.biorxiv.org/content/10.1101/416545v1) paper as a guideline for the different methods of computing PRS, and we can compare which PRS has the best results.
 2) The way we defined trauma in the linear interaction model in my thesis was kind of arbitrary. We used a 0-4 scale on each specific trauma measure. I suggest we run the same model but with all reasonble ways of defining trauma, such as a binary variable that is 1 if a subject has had severe trauma on any of the four measures, and a 0-16 scale which just sums up the score on each of the four trauma measures, which are reasonable ways to construct the variable from the top of my head.
 
 3) if possible, and if computing power is not to expensive, we could run the vQTL with the three other ways of testing for equality of variance.
+
+4) discuss the results from my thesis. 
 
 
 ## Project 1 - Dissecting the age of onset trait in the UKBB
