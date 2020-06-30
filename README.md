@@ -7,7 +7,7 @@ Personal Blog of Arvid Harder
 Lu Yi proposed three projects to work on, and i like the framing of that. I have based the structure of this plan from the notes
 on our meeting you sent me.
 Some general ideas from Arvid:
-I would like to apply a "multiverse" approach as discussed in [this article] (http://www.stat.columbia.edu/~gelman/research/published/multiverse_published.pdf)
+I would like to apply a "multiverse" approach as discussed in [this article](http://www.stat.columbia.edu/~gelman/research/published/multiverse_published.pdf)
 This approach has been used in other contemporary genetic research, such as in [Border et al](https://ajp.psychiatryonline.org/doi/full/10.1176/appi.ajp.2018.18070881). This is not very different from sensitivity analyses. This is how i summarized it to myself:
 
 "At several stages in data-anaylsis in a paper there are often several arbitrary choices to make about data-processing and choices for statistical analysis. For each paper, therefore, a host of possible datasets exists, a multiverse of datasets, and a multiverse of ways of analyzing the datasets. The solution to this is to leverage the scalability of modern programming tools, and to do ALL THE ANALYSIS, on ALL OF THE DATASETS."
